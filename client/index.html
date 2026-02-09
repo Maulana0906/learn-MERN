@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Fetch API Test</title>
+  </head>
+  <body>
+    <h1>Testing Fetch API</h1>
+    <button id="send">Send Data</button>
+    <button id="update">Update Data</button>
+    <button id="delete">Delete Data</button>
+    <div id="isi"></div>
+
+    <script>
+        const container = document.getElementById("isi");
+
+        document.getElementById("send").addEventListener("click", async function() {
+            const update = await fetching()
+            container.innerHTML = update.map(e => { 
+                return `<ul> 
+                    <li>${e.id}</li> 
+                    <li>${e.title}</li> 
+                    <li>${e.content}</li> 
+                    </ul>`
+                }).join(''); }); 
+                
+            async function fetching(){ 
+                return fetch("http://localhost:3000/notes", { 
+                    method: "POST", 
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ 
+                        title: "Belajar API", 
+                        content: "Testing fetch dari browser" 
+                        }) 
+                    })
+                    .then(res => res.json()) 
+                    .then(res => res) 
+                    .catch(err => console.error(err)); 
+                } 
+                
+        document.getElementById("update").addEventListener("click", async function () { 
+                    const editData = await updateData(); 
+                    console.log(editData) 
+                    container.innerHTML = editData.map(e => {
+                        return `<ul> 
+                            <li>${e.id}</li> 
+                            <li>${e.title}</li>
+                            <li>${e.content}</li> 
+                            </ul> 
+                        `}).join(''); 
+                    }) 
+                
+                async function updateData(){
+                    return fetch("http://localhost:3000/notes/6", {
+                        method : "PUT", 
+                        headers : { 
+                            "Content-Type" : "application/json" 
+                            }, 
+                        body : JSON.stringify({ 
+                            title : "Baru", 
+                            content : "Testing update" 
+                            }) 
+                        }) 
+                        .then(res => res.json()) 
+                        .then(res => res) 
+                        .catch(err => console.log(err))
+        }
+
+
+        document.getElementById("delete").addEventListener("click", async function() {
+            const getResDel = await deleteData()
+            container.innerHTML = getResDel.map(e => { 
+                return `<ul> 
+                    <li>${e.id}</li> 
+                    <li>${e.title}</li> 
+                    <li>${e.content}</li> 
+                    </ul>`
+                }).join(''); }); 
+                
+            async function deleteData(){ 
+                return fetch("http://localhost:3000/notes/1", { 
+                    method: "DELETE", 
+                    headers: { "Content-Type": "application/json" },
+                    })
+                    .then(res => res.json()) 
+                    .then(res => res) 
+                    .catch(err => console.error(err)); 
+                } 
+                
+
+
+    </script>
+  </body>
+</html>
