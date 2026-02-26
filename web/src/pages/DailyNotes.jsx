@@ -3,6 +3,7 @@ import ModalContainer from "../components/modals/ModalContainer.jsx"
 import {useState, useEffect} from "react";
 import Button from "../components/Button.jsx";
 import Pagination from "../components/pagination.jsx";
+import Search from "../components/Search.jsx";
 
 function DailyNotes(){
 const defaultValue = {
@@ -19,7 +20,12 @@ useEffect(() => {
     const fetchNotes = async() => {
         try{
             
-            const res = await fetch(`http://localhost:3000/notes?page=${page}&limit=${limit}`)
+            const res = await fetch(`http://localhost:3000/notes?page=${page}&limit=${limit}`, {
+                method : "GET",
+                headers : {
+                            "Content-Type" : "application/json"
+                        }
+            })
 
             if(!res.ok){
                 throw new Error("Failed to fetch notes")
@@ -45,7 +51,12 @@ useEffect(() => {
     if(selectedNote){
         const fetchNoteDetail = async () => {
             try{
-                const res = await fetch(`http://localhost:3000/notes/${selectedNote}`)
+                const res = await fetch(`http://localhost:3000/notes/${selectedNote}`, {
+                    method : "GET",
+                    headers : {
+                            "Content-Type" : "application/json"
+                        }
+                })
                 if(!res.ok){
                     throw new Error("Failed to fetch note detail")
                 }
@@ -169,7 +180,9 @@ function deleteNote({typeButton, idNotes}){
 function switchPage({page, limit}){
      const fetchNotes = async() => {
         try{
-            const res = await fetch(`http://localhost:3000/notes?page=${page}&limit=${limit}`)
+            const res = await fetch(`http://localhost:3000/notes?page=${page}&limit=${limit}`, {
+                method : "GET"
+            })
 
             if(!res.ok){
                 throw new Error("Failed to fetch notes")
@@ -177,9 +190,56 @@ function switchPage({page, limit}){
 
             const data = await res.json();
             const pivotData = JSON.parse(data)
-            console.log(pivotData)
+
             setNotes(pivotData);
         } catch(err){
+            console.log(err)
+        }
+    }
+    fetchNotes()
+}
+
+function resetValueSearch({page, limit}){
+     const fetchNotes = async() => {
+        try{
+            const res = await fetch(`http://localhost:3000/notes?page=${page}&limit=${limit}`, {
+                method : "GET"
+            })
+
+            if(!res.ok){
+                throw new Error("Failed to fetch notes")
+            }
+
+            const data = await res.json();
+            const pivotData = JSON.parse(data)
+
+            setNotes(pivotData);
+        } catch(err){
+            console.log(err)
+        }
+    }
+    fetchNotes()
+}
+
+function searchNotes({content}, e){
+    e.preventDefault();
+    const fetchNotes = async() => {
+        try {
+            const res = await fetch(`http://localhost:3000/notes/search/${content}`, {
+                method : "GET",
+                headers : {
+                            "Content-Type" : "application/json",
+                        }
+            })
+              if(!res.ok){
+                throw new Error("Failed to fetch notes")
+            }
+
+            const data = await res.json();
+            const pivotData = JSON.parse(data)
+
+            setNotes(pivotData);
+        }catch(err){
             console.log(err)
         }
     }
@@ -190,6 +250,7 @@ function switchPage({page, limit}){
         <>
             <div className="flex justify-between px-5">
                 <h1 className="text-xl font-semibold m-2">List Notes :</h1>
+                <Search searchNotes={searchNotes} resetValueSearch={resetValueSearch} />
                 <Button content="Create Note" type="tersierBtn" typeButton="create" onClickModal={onClickModal}/>
             </div>
             <div className="flex gap-5 flex-wrap my-2 mx-4">
@@ -199,7 +260,7 @@ function switchPage({page, limit}){
                     })
                 }
             </div>
-            <Pagination page={page} limit={limit} notes={notes.total_notes} swicthPage={switchPage} />
+            <Pagination page={page} limit={limit} notes={notes.total_notes} switchPage={switchPage} />
             {
                 isOpenModal ? 
                 <ModalContainer selectedTypeModal={selectedTypeModal} editNote={editNote} onClickCloseModal={onClickCloseModal} detailNote={detailNote} sendNoteToServer={sendNoteToServer} />

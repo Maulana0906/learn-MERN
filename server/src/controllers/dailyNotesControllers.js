@@ -73,3 +73,19 @@ export const updateNote = async (req, res) => {
         res.status(400).json({"message" : err.message})
     }
 }
+
+export const searchNotesByTitle = async (req, res) => {
+     try{
+        const fileBuffer = await dailyNotesService.searchNotesByTitle(req.params.title);
+        const data = JSON.parse(fileBuffer);
+        const pivotData = {
+            total_notes : data.length,
+            data : data,
+            page : 1
+        }
+        return res.status(200).json(JSON.stringify(pivotData))
+
+    }catch(err){
+        res.status(400).json({"message" : err.message})
+    }
+}
