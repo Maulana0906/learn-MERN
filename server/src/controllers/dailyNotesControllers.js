@@ -76,13 +76,10 @@ export const updateNote = async (req, res) => {
 
 export const searchNotesByTitle = async (req, res) => {
      try{
+        const [page, limit] = [req.query.page, req.query.limit];
         const fileBuffer = await dailyNotesService.searchNotesByTitle(req.params.title);
         const data = JSON.parse(fileBuffer);
-        const pivotData = {
-            total_notes : data.length,
-            data : data,
-            page : 1
-        }
+        const pivotData = result(data, page, limit)
         return res.status(200).json(JSON.stringify(pivotData))
 
     }catch(err){

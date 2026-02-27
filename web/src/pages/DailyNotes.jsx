@@ -45,6 +45,10 @@ const [isOpenModal, setIsOpenModal] = useState(false);
 const [selectedTypeModal, setSelectedTypeModal] = useState(null)
 const [selectedNote, setSelectedNote] = useState(null);
 const [detailNote, setDetailNote] = useState(null);
+const [isSearch, setIsSearch] = useState({
+    value : false,
+    title : ""
+});
 
 
 useEffect(() => {
@@ -180,7 +184,10 @@ function deleteNote({typeButton, idNotes}){
 function switchPage({page, limit}){
      const fetchNotes = async() => {
         try{
-            const res = await fetch(`http://localhost:3000/notes?page=${page}&limit=${limit}`, {
+            const url = isSearch.value ? `http://localhost:3000/notes/search/${isSearch.title}?page=${page}&limit=${limit}`
+                    :`http://localhost:3000/notes?page=${page}&limit=${limit}`;
+
+            const res = await fetch(url, {
                 method : "GET"
             })
 
@@ -202,6 +209,7 @@ function switchPage({page, limit}){
 function resetValueSearch({page, limit}){
      const fetchNotes = async() => {
         try{
+            setIsSearch(prev => ({...prev, value : false, title : ""}));
             const res = await fetch(`http://localhost:3000/notes?page=${page}&limit=${limit}`, {
                 method : "GET"
             })
@@ -220,12 +228,12 @@ function resetValueSearch({page, limit}){
     }
     fetchNotes()
 }
-
 function searchNotes({content}, e){
     e.preventDefault();
     const fetchNotes = async() => {
         try {
-            const res = await fetch(`http://localhost:3000/notes/search/${content}`, {
+            setIsSearch(prev => ({...prev, value : true, title : content}));
+            const res = await fetch(`http://localhost:3000/notes/search/${content}?page=1&limit=5`, {
                 method : "GET",
                 headers : {
                             "Content-Type" : "application/json",
@@ -237,6 +245,7 @@ function searchNotes({content}, e){
 
             const data = await res.json();
             const pivotData = JSON.parse(data)
+            console.log(pivotData)
 
             setNotes(pivotData);
         }catch(err){
@@ -256,7 +265,7 @@ function searchNotes({content}, e){
             <div className="flex gap-5 flex-wrap my-2 mx-4">
                 { 
                     notes.data.map((note,i) => {
-                        return <CardNotes key={i} onClickModal={onClickModal} idNotes={note.id} title={note.title} content={note.content} deleteNote={deleteNote} />
+                        return <CardNotes key={i} onClickModal={onClickModal} idNotes={note.id} title={note.title} content={note.content} deleteNote={deleteNote} isSearch={isSearch} />
                     })
                 }
             </div>

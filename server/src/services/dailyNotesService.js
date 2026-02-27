@@ -44,7 +44,7 @@ export const updateNote = async (body) => {
     return result;
 }
 
-export const searchNotesByTitle = async (title) => {
+export const searchNotesByTitle = async (title, query) => {
     if(title.length < 1 && !title){
         throw new Error("Your data is not complete");
     }

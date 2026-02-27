@@ -21,3 +21,7 @@ function Search({searchNotes, resetValueSearch}){
     )
 }
 export default Search;
+
+
+
+// KETIKA HASIL DARI SEARCH NULL MAKA BUAT UI NYA DAN PERBAIKI BUG PAGINATION NYA JUGA
