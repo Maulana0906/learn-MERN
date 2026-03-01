@@ -1,5 +1,5 @@
-function Pagination({page, limit, notes, switchPage}) {
-    const totalPage = Math.ceil(notes/limit);
+function Pagination({page, limit, totalNotes, switchPage}) {
+    const totalPage = Math.ceil(totalNotes/limit);
     const numberPage = [];
     
     for(let i=1; i<=totalPage; i++){
@@ -9,11 +9,10 @@ function Pagination({page, limit, notes, switchPage}) {
     // pagination window
     const windowSize = 5;
     const totalBlock = Math.ceil(totalPage/windowSize)
-    const currentBlock = Math.ceil(Number(page)/windowSize) 
+    const currentBlock = totalNotes < 1 ? 0 : Math.ceil(Number(page)/windowSize) 
     const startPage =  (currentBlock-1)*windowSize + 1;
     const endPage = Math.min(startPage + windowSize - 1, totalPage);
     const visiblePages = numberPage.filter(el => el >= startPage && el <= endPage);
-
 
     let isLastPage = false;
     numberPage.forEach(el => {

@@ -41,8 +41,10 @@ export const createNote = async (body) => {
     arrRes.push({
         id,
         title : body.title,
-        content : body.content
+        content : body.content,
+        image : body.image
     })
+    console.log(arrRes);
     await fs.promises.writeFile("./server/src/data/notes.json", JSON.stringify(arrRes, null, 2), 'utf-8');
     return getNotes();
 }

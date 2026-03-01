@@ -22,6 +22,7 @@ export const deleteNote = async (id) => {
 }
 
 export const createNote = async (body) => {
+    console.log(body)
     const title = body.title;
     const content = body.content;
 

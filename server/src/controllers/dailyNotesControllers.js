@@ -4,11 +4,12 @@ const result = (data, page, limit) => {
     const startIndex = (page - 1) *limit;
     const endIndex = page * limit;
 
+    const checkPage = data.length < 1 ? 0 : page;
     const dataSlice = data.slice(startIndex, endIndex);
     return {
         total_notes : data.length,
         data : dataSlice,
-        page : page
+        page : checkPage
     }
 }
 
@@ -51,7 +52,7 @@ export const deleteNote = async (req, res) => {
 export const createNote = async (req, res) => {
     try{
         const {page, limit} = req.query;
-        const fileBuffer = await dailyNotesService.createNote(req.body);
+        const fileBuffer = await dailyNotesService.createNote({...req.body, image : req.file ? req.file.filename : null});
         const data = JSON.parse(fileBuffer)
         const pivotData = result(data, page, limit)
         

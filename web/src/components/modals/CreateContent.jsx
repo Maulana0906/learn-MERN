@@ -3,7 +3,8 @@ import {useState} from "react";
 function CreateContent({sendNoteToServer}){
     const [formData, setFormData] = useState({
         title : "",
-        content : ""
+        content : "",
+        image : null
     })
 
     return <div className="p-5">
@@ -23,7 +24,8 @@ function CreateContent({sendNoteToServer}){
                             setFormData({...formData, content : e.target.value})
                         } required/>
                 </label>
-                <button type="submit" className="mt-5 rounded-md px-2 py-1 shadow-sm font-semibold tracking-wide text-sm my-2 leading-4 cursor-pointer bg-blue-500 text-white"> Save changes </button>
+                <input className="w-3/4 border-2 border-gray-700 px-2 py-0.5 rounded-sm bg-gray-100 mt-5 cursor-pointer" type="file" onChange={(e) => setFormData({...formData, image : e.target.files[0]})} />
+                <button type="submit" className="block mt-5 rounded-md px-2 py-2 shadow-sm font-semibold tracking-wide text-sm my-2 leading-4 cursor-pointer bg-blue-500 text-white"> Save changes </button>
             </form>
     </div>
 }

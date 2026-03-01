@@ -2,7 +2,7 @@ import CardNotes from "../components/CardNotes";
 import ModalContainer from "../components/modals/ModalContainer.jsx"
 import {useState, useEffect} from "react";
 import Button from "../components/Button.jsx";
-import Pagination from "../components/pagination.jsx";
+import Pagination from "../components/Pagination.jsx";
 import Search from "../components/Search.jsx";
 
 function DailyNotes(){
@@ -131,14 +131,16 @@ function sendNoteToServer({type, formData}, e){
         putNote();
         setSelectedTypeModal("detail");
     }else if(type === "create"){
-         const postNote = async () => {
+        const postNote = async () => {
                 try{
+                    const form = new FormData();
+                    form.append("title", formData.title)
+                    form.append("content", formData.content)
+                    form.append("image", formData.image)
+
                     const res = await fetch(`http://localhost:3000/notes?page=${page}&limit=${limit}`, {
                         method : "POST",
-                        headers : {
-                            "Content-Type" : "application/json",
-                        },
-                        body : JSON.stringify(formData)
+                        body : form
                     })
 
                     if(!res.ok){
@@ -245,7 +247,6 @@ function searchNotes({content}, e){
 
             const data = await res.json();
             const pivotData = JSON.parse(data)
-            console.log(pivotData)
 
             setNotes(pivotData);
         }catch(err){
@@ -254,7 +255,6 @@ function searchNotes({content}, e){
     }
     fetchNotes()
 }
-
     return (
         <>
             <div className="flex justify-between px-5">
@@ -263,13 +263,14 @@ function searchNotes({content}, e){
                 <Button content="Create Note" type="tersierBtn" typeButton="create" onClickModal={onClickModal}/>
             </div>
             <div className="flex gap-5 flex-wrap my-2 mx-4">
-                { 
+                {
+                    notes.total_notes < 1 ? <p className="text-center w-full text-lg font-medium mt-5 text-gray-500">Note not Found</p> :
                     notes.data.map((note,i) => {
-                        return <CardNotes key={i} onClickModal={onClickModal} idNotes={note.id} title={note.title} content={note.content} deleteNote={deleteNote} isSearch={isSearch} />
+                        return <CardNotes key={i} onClickModal={onClickModal} pathImage={note.image} idNotes={note.id} title={note.title} content={note.content} deleteNote={deleteNote} isSearch={isSearch} />
                     })
                 }
             </div>
-            <Pagination page={page} limit={limit} notes={notes.total_notes} switchPage={switchPage} />
+            <Pagination page={page} limit={limit} totalNotes={notes.total_notes} switchPage={switchPage} />
             {
                 isOpenModal ? 
                 <ModalContainer selectedTypeModal={selectedTypeModal} editNote={editNote} onClickCloseModal={onClickCloseModal} detailNote={detailNote} sendNoteToServer={sendNoteToServer} />
