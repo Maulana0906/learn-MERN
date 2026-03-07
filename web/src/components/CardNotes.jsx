@@ -2,7 +2,6 @@ import Button from './Button.jsx';
 
 
 function CardNotes({title, content, pathImage, idNotes, onClickModal, deleteNote, isSearch}){
-    console.log(pathImage)
     const markSearch = (title, keyword) => {
         if(!keyword || keyword.length < 1) return title;
 
