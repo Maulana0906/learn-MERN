@@ -14,6 +14,9 @@ function Button({type, content, onClickModal, idNotes, typeButton}){
         case "closeModalDetailNote" :
             design = "cursor-pointer w-8 pb-1 text-xl font-bold text-gray-800 bg-slate-200 rounded-full absolute right-3 top-3"
             break;
+        case "sortingBtn" :
+            design = "rounded-md px-2 py-1 shadow-sm font-semibold tracking-wide text-sm my-2 leading-4 cursor-pointer bg-slate-200 text-gray-700"
+            break;
     }
      
     

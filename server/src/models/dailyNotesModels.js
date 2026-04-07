@@ -61,7 +61,7 @@ export const updateNote = async (body) => {
 
     const result = arrRes.map(item => {
         if(Number(item.id) === Number(body.id)){
-            return {...item, title : body.title, content : body.content}
+            return {...item, title : body.title, content : body.content, image : body.image}
         }
         return item;
     })
@@ -69,19 +69,3 @@ export const updateNote = async (body) => {
     await fs.promises.writeFile("./server/src/data/notes.json", JSON.stringify(result, null, 2), 'utf-8');
     return getNotes();
 }
-
-export const searchNotesByTitle = async (title) => {
-    const fileBuffer = await getNotes();
-    const data = JSON.parse(fileBuffer);
-
-    const pivotData = data.filter(e => {
-        const eTitle = e.title.toLowerCase()
-
-        if(eTitle === title || eTitle.includes(title)){
-            return e;
-        }
-    })
-
-    return JSON.stringify(pivotData)
-}
-

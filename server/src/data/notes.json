@@ -2,22 +2,26 @@
   {
     "id": 1,
     "title": "Belajar puasa",
-    "content": "Belajar REST FULL API di bulan puasa cuy"
+    "content": "Belajar REST FULL API di bulan puasa cuy",
+    "image": "1774222647341-lightning.webp"
   },
   {
     "id": 3,
     "title": "Belajar API",
-    "content": "Belajar REST FULL API di bulan puasa cuy"
+    "content": "Belajar REST FULL API di bulan puasa cuy",
+    "image": "1774222634373-buzz.webp"
   },
   {
     "id": 4,
     "title": "Belajar JS dengan react",
-    "content": "semoga lancar"
+    "content": "semoga lancar",
+    "image": "1774223891867-baymax.webp"
   },
   {
     "id": 7,
-    "title": "adassd",
-    "content": "asdadsa"
+    "title": "Learn create proposal",
+    "content": "i think i'll finished this challenger",
+    "image": "1775570370292-joy.webp"
   },
   {
     "id": 8,
@@ -65,5 +69,23 @@
     "title": "asd",
     "content": "ads",
     "image": "1772891803563-klipartz 1.png"
+  },
+  {
+    "id": 17,
+    "title": "kkjsa",
+    "content": "asd",
+    "image": "1774169170319-Untitled-2025-12-25-2037.png"
+  },
+  {
+    "id": 18,
+    "title": "sepeda",
+    "content": "asda",
+    "image": null
+  },
+  {
+    "id": 19,
+    "title": "asd",
+    "content": "as",
+    "image": "1775570000698-sulley.webp"
   }
 ]

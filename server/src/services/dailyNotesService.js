@@ -44,11 +44,3 @@ export const updateNote = async (body) => {
     const result = await dailyNotesModels.updateNote(body);
     return result;
 }
-
-export const searchNotesByTitle = async (title, query) => {
-    if(title.length < 1 && !title){
-        throw new Error("Your data is not complete");
-    }
-    const result = await dailyNotesModels.searchNotesByTitle(title);
-    return result;
-}
