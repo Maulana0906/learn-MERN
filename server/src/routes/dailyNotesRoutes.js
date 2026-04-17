@@ -4,14 +4,22 @@ import {
     getNoteById,
     deleteNote,
     createNote,
-    updateNote
+    updateNote,
+    validationLogin
 } from "../controllers/dailyNotesControllers.js";
+
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const DATA_PATH = path.join(__dirname, "../../uploads/")
 
 // middleware upload file with multer
 import multer from "multer";
 const storage = multer.diskStorage({
     destination : (req, file, cb) => {
-        cb(null, "server/uploads/")
+        cb(null, DATA_PATH)
     },
     filename : (req, file, cb) => {
         cb(null, + Date.now() + "-" + file.originalname);
@@ -27,12 +35,14 @@ const fileFilter = (req, file, cb) => {
         cb(new Error("File must be an image"));
     }
 } 
+const sizeLimit = 1024 * 1024 * 2;
 
-const upload = multer({storage, fileFilter})
+const upload = multer({storage, fileFilter, limits : {fileSize : sizeLimit}})
 
 
 const router = express.Router();
 
+router.get("/login", validationLogin);
 router.get("/", getAllNotes);
 router.get("/:id", getNoteById);
 router.delete("/:id", deleteNote);

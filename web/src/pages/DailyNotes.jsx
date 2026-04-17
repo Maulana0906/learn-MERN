@@ -7,14 +7,20 @@ import Search from "../components/Search.jsx";
 import Sorting from "../components/Sorting.jsx";
 
 function DailyNotes(){
+
 const defaultValue = {
-    total_notes : 0,
-    page : 1,
-    data : []
+    data : [],
+    meta : {
+        page : 1,
+        limit : 5,
+        total_notes : 0,
+        total_pages : 0
+    }
 }
+
 const [notes, setNotes] = useState(defaultValue)
 
-const page = notes.page || 1;
+const page = notes.meta.page || 1;
 const limit = 5;
 
 const [isSorting, setIsSorting] = useState({
@@ -39,7 +45,8 @@ useEffect(() => {
 
             const data = await res.json();
             const pivotData = JSON.parse(data)
-            setNotes(pivotData);
+
+            setNotes({data : pivotData.data, meta : pivotData.meta});
         } catch(err){
             console.log(err)
         }
@@ -136,8 +143,6 @@ function sendNoteToServer({type, formData}, e){
        
     }
 
-    // CARA MENANGKAP THROW ERROR
-
     if(type === "edit"){
         const putNote = async () => {
                 try{
@@ -155,9 +160,10 @@ function sendNoteToServer({type, formData}, e){
                         method : "PUT",
                         body : form
                     })
+                    const resJson = await res.json();
 
                     if(!res.ok){
-                        throw new Error("Failed to fetch note detail")
+                        throw new Error(resJson.message)
                     }
 
                     const data = await res.json();
@@ -243,6 +249,7 @@ function switchPage({page, limit}){
             } else{
                 url = `http://localhost:3000/notes?page=${page}&limit=${limit}`
             }
+
             
             const res = await fetch(url, {
                 method : "GET"
@@ -347,13 +354,13 @@ function handleSorting({typeButton}){
             <Sorting handleSorting={handleSorting} />
             <div className="flex gap-5 flex-wrap my-2 mx-4">
                 {
-                    notes.total_notes < 1 ? <p className="text-center w-full text-lg font-medium mt-5 text-gray-500">Note not Found</p> :
+                    notes.meta.total_notes < 1 ? <p className="text-center w-full text-lg font-medium mt-5 text-gray-500">Note not Found</p> :
                     notes.data.map((note,i) => {
                         return <CardNotes key={i} onClickModal={onClickModal} pathImage={note.image} idNotes={note.id} title={note.title} content={note.content} deleteNote={deleteNote} isSearch={isSearch} />
                     })
                 }
             </div>
-            <Pagination page={page} limit={limit} totalNotes={notes.total_notes} switchPage={switchPage}/>
+            <Pagination page={page} limit={limit} totalNotes={notes.meta.total_notes} switchPage={switchPage}/>
             {
                 isOpenModal ? 
                 <ModalContainer selectedTypeModal={selectedTypeModal} editNote={editNote} onClickCloseModal={onClickCloseModal} detailNote={detailNote} sendNoteToServer={sendNoteToServer} />

@@ -1,7 +1,15 @@
 import fs from "fs";
 
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const DATA_NOTES_PATH = path.join(__dirname, "../data/notes.json")
+const DATA_USER_PATH = path.join(__dirname, "../data/user.json")
+
 const getNotes = async () => {
-    return await fs.promises.readFile("./server/src/data/notes.json", "utf-8");
+    return await fs.promises.readFile(DATA_NOTES_PATH , "utf-8");
 }
 
 export const getAllNotes = async () => {
@@ -24,11 +32,11 @@ export const deleteNote = async (id) => {
     const find = arrRes.filter(e => Number(e.id) === id);
     
     if(find.length < 0){
-        throw new Error("Note not found");
+        throw new Error("Note not found", {statusCode : 404});
     } 
 
     const result = JSON.stringify(arrRes.filter(e => Number(e.id) !== Number(id)), null, 2);
-    await fs.promises.writeFile("./server/src/data/notes.json",result, 'utf-8')
+    await fs.promises.writeFile(DATA_NOTES_PATH ,result, 'utf-8')
     
     return getNotes();
 }
@@ -45,27 +53,31 @@ export const createNote = async (body) => {
         image : body.image
     })
     console.log(arrRes);
-    await fs.promises.writeFile("./server/src/data/notes.json", JSON.stringify(arrRes, null, 2), 'utf-8');
+    await fs.promises.writeFile(DATA_NOTES_PATH , JSON.stringify(arrRes, null, 2), 'utf-8');
     return getNotes();
 }
 
 export const updateNote = async (body) => {
-    const res = await getNotes();
-    const arrRes = await JSON.parse(res);
+    const notes = await getNotes();
+    const parseNotes = await JSON.parse(notes);
     
-    const find = arrRes.filter(e => Number(e.id) === Number(body.id));
+    const find = parseNotes.filter(e => Number(e.id) === Number(body.id));
 
     if(!find){
-         throw new Error("Note not found")
+         throw new Error("Note not found", {statusCode : 404})
     }
 
-    const result = arrRes.map(item => {
+    const result = parseNotes.map(item => {
         if(Number(item.id) === Number(body.id)){
             return {...item, title : body.title, content : body.content, image : body.image}
         }
         return item;
     })
 
-    await fs.promises.writeFile("./server/src/data/notes.json", JSON.stringify(result, null, 2), 'utf-8');
+    await fs.promises.writeFile(DATA_NOTES_PATH , JSON.stringify(result, null, 2), 'utf-8');
     return getNotes();
 }
+
+export const getAllUser = async () => {
+    return fileBuffer = await fs.promises.readFile(DATA_USER_PATH, "utf-8");
+} 

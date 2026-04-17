@@ -3,7 +3,7 @@
     "id": 1,
     "title": "Belajar puasa",
     "content": "Belajar REST FULL API di bulan puasa cuy",
-    "image": "1774222647341-lightning.webp"
+    "image": "1776429775188-woody.webp"
   },
   {
     "id": 3,
@@ -15,33 +15,37 @@
     "id": 4,
     "title": "Belajar JS dengan react",
     "content": "semoga lancar",
-    "image": "1774223891867-baymax.webp"
+    "image": "1776429603900-joy.webp"
   },
   {
     "id": 7,
     "title": "Learn create proposal",
     "content": "i think i'll finished this challenger",
-    "image": "1775570370292-joy.webp"
+    "image": "1776429615292-buzz.webp"
   },
   {
     "id": 8,
-    "title": "asdasd",
-    "content": "asdasd"
+    "title": "Belajar MERN",
+    "content": "semangat",
+    "image": "1776429703084-dori.webp"
   },
   {
     "id": 9,
     "title": "Slowmotion",
-    "content": "Heloo"
+    "content": "Heloo",
+    "image": "1776431052753-boss baby.svg"
   },
   {
     "id": 10,
     "title": "adsasd",
-    "content": "asdads"
+    "content": "asdads",
+    "image": "1776431113530-lightning.webp"
   },
   {
     "id": 11,
     "title": "hfghf",
-    "content": "ghjgj"
+    "content": "ghjgj",
+    "image": "1776431256785-Screenshot 2025-12-20 194345.png"
   },
   {
     "id": 12,
@@ -52,11 +56,6 @@
     "id": 13,
     "title": "gjghjg",
     "content": "trtyty"
-  },
-  {
-    "id": 14,
-    "title": "fghfh",
-    "content": "fghfjj"
   },
   {
     "id": 15,
@@ -87,5 +86,17 @@
     "title": "asd",
     "content": "as",
     "image": "1775570000698-sulley.webp"
+  },
+  {
+    "id": 20,
+    "title": "rapunzel",
+    "content": "gadis lucu",
+    "image": "1775613929135-rapunzel.webp"
+  },
+  {
+    "id": 21,
+    "title": "new",
+    "content": "lorem ipsum",
+    "image": "1776428745364-shifu.webp"
   }
 ]
