@@ -17,17 +17,23 @@ const defaultValue = {
         total_pages : 0
     }
 }
-
 const [notes, setNotes] = useState(defaultValue)
-
+// const [isOpenModal, setIsOpenModal] = useState(false);
+// const [selectedTypeModal, setSelectedTypeModal] = useState(null)
+// const [selectedNote, setSelectedNote] = useState(null);
+const [detailNote, setDetailNote] = useState(null);
+const [isSearch, setIsSearch] = useState({
+    value : false,
+    title : ""
+});
 const page = notes.meta.page || 1;
 const limit = 5;
-
 const [isSorting, setIsSorting] = useState({
     value : false,
     type : ""
 })
 
+// get all note
 useEffect(() => {
     const fetchNotes = async() => {
         try{
@@ -53,17 +59,7 @@ useEffect(() => {
     }
     fetchNotes()
 }, [])
-
-const [isOpenModal, setIsOpenModal] = useState(false);
-const [selectedTypeModal, setSelectedTypeModal] = useState(null)
-const [selectedNote, setSelectedNote] = useState(null);
-const [detailNote, setDetailNote] = useState(null);
-const [isSearch, setIsSearch] = useState({
-    value : false,
-    title : ""
-});
-
-
+// Detail note
 useEffect(() => {
     if(selectedNote){
         const fetchNoteDetail = async () => {
@@ -88,6 +84,8 @@ useEffect(() => {
     }
 }, [selectedNote])
 
+
+// UI modal
 function onClickModal({typeButton, idNotes}){
     if(isOpenModal) return;
 
@@ -104,17 +102,16 @@ function onClickModal({typeButton, idNotes}){
     setSelectedTypeModal(() => isOpenModal ? null : typeButton);
     setIsOpenModal(prev => !prev)
 }
-
 function onClickCloseModal(){
     setSelectedNote(null)
     setSelectedTypeModal(null);
     setIsOpenModal(false)
 }
-
 function editNote(){
     setSelectedTypeModal("edit");
 }
 
+// CRUD
 function sendNoteToServer({type, formData}, e){
     e.preventDefault();
 
@@ -160,13 +157,12 @@ function sendNoteToServer({type, formData}, e){
                         method : "PUT",
                         body : form
                     })
-                    const resJson = await res.json();
+                    const data = await res.json();
 
                     if(!res.ok){
-                        throw new Error(resJson.message)
+                        throw new Error(data.message)
                     }
 
-                    const data = await res.json();
                     const pivotData = JSON.parse(data);
 
                     setNotes(pivotData);
@@ -207,7 +203,6 @@ function sendNoteToServer({type, formData}, e){
         postNote();
     }
 }
-
 function deleteNote({typeButton, idNotes}){
     const confirm = window.confirm("Are you sure you want to delete this note ?")
 
@@ -233,6 +228,7 @@ function deleteNote({typeButton, idNotes}){
     dlt();
 }
 
+// pagination
 function switchPage({page, limit}){
      const fetchNotes = async() => {
         try{
@@ -270,6 +266,7 @@ function switchPage({page, limit}){
     fetchNotes()
 }
 
+// search
 function resetValueSearch({page, limit}){
      const fetchNotes = async() => {
         try{
@@ -317,6 +314,21 @@ function searchNotes({content}, e){
     fetchNotes()
 }
 
+// Repairing function
+import { useNotes } from "../hooks/daily_notes/useNotes";
+import { useModalNote } from "../hooks/daily_notes/useModalNote";
+import { useNoteForm } from "../hooks/daily_notes/useNoteForm";
+
+// modal
+const {isOpenModal, mode, selectedNote, openCreate} = useModalNote();
+function openModal(mode, data){
+    if(isOpenModal) return;
+
+    
+}
+// sampai sini
+
+// sorting
 function handleSorting({typeButton}){
     const fetchNotes = async () => {
         try {
@@ -349,7 +361,7 @@ function handleSorting({typeButton}){
             <div className="flex justify-between px-5">
                 <h1 className="text-xl font-semibold m-2">List Notes :</h1>
                 <Search searchNotes={searchNotes} resetValueSearch={resetValueSearch} />
-                <Button content="Create Note" type="tersierBtn" typeButton="create" onClickModal={onClickModal}/>
+                <Button content="Create Note" type="tersierBtn" typeButton="create" onClick={openModal("create")}/>
             </div>
             <Sorting handleSorting={handleSorting} />
             <div className="flex gap-5 flex-wrap my-2 mx-4">

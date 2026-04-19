@@ -7,9 +7,6 @@ function CreateContent({sendNoteToServer}){
         content : "",
         image : null
     })
-    useEffect(() => {
-        console.log(formData)
-    }, [formData]);
 
     return <div className="p-5">
           <h1 className="font-semibold text-lg text-gray-700">Create new Note</h1>
