@@ -1,21 +1,21 @@
 import {useState} from 'react';
 
 
-const useFormNote = () => {
+export const useFormNote = () => {
     const [formData, setFormData] = useState({
+        id : "",
         title : "",
         content : "",
-        image : null
+        image : ""
     })
 
     const changeForm = (e) => {
         const {name, value, files} = e.target;
-
-        if(name === "image"){
-            setFormData({...formData, image : files[0]})
-        }else{
-            setFormData({...formData, [name] : value})
-        }
+        
+        setFormData(prev => ({
+            ...prev, image : (name === "image") ? (files ? files[0] : value) : prev.image,
+            ...(name !== "image" && {[name] : value}) 
+        }))
     }
 
     const resetForm = () => {
@@ -26,4 +26,9 @@ const useFormNote = () => {
         })
     }
 
+    return {
+        formData,
+        changeForm,
+        resetForm
+    }
 }

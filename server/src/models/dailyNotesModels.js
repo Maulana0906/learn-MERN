@@ -52,14 +52,14 @@ export const createNote = async (body) => {
         content : body.content,
         image : body.image
     })
-    console.log(arrRes);
     await fs.promises.writeFile(DATA_NOTES_PATH , JSON.stringify(arrRes, null, 2), 'utf-8');
-    return getNotes();
+    return getNoteById(id);
 }
 
 export const updateNote = async (body) => {
     const notes = await getNotes();
     const parseNotes = await JSON.parse(notes);
+    console.log(parseNotes)
     
     const find = parseNotes.filter(e => Number(e.id) === Number(body.id));
 
@@ -75,7 +75,7 @@ export const updateNote = async (body) => {
     })
 
     await fs.promises.writeFile(DATA_NOTES_PATH , JSON.stringify(result, null, 2), 'utf-8');
-    return getNotes();
+    return getNoteById(body.id);
 }
 
 export const getAllUser = async () => {

@@ -30,7 +30,7 @@ export const deleteNote = async (req,res,next) => {
 
 export const createNote = async (req, res, next) => {
     try{
-        const result = await dailyNotesService.createNote({...req.body, image : req.file ? req.file.filename : null}, req.query);
+        const result = await dailyNotesService.createNote({...req.body, image : req.file ? req.file.filename : null});
         res.status(200).json(result);
     }catch(err){
         next(err)

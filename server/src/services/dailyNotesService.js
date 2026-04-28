@@ -14,7 +14,7 @@ const result = (data, page, limit) => {
     const checkPage = data.length < 1 ? 0 : Number(page);
     const dataSlice = data.slice(startIndex, endIndex);
 
-    return JSON.stringify({
+    return{
         success : true,
         message : "Success get notes",
         data : dataSlice,
@@ -25,7 +25,7 @@ const result = (data, page, limit) => {
             total_pages : Math.ceil(data.length / limit)
         }
         
-    })
+    }
 }
 
 const checkPageNLimit = (page, limit) => {
@@ -94,9 +94,7 @@ export const deleteNote = async (id, query) => {
     return result(data, page, limit);
 }
 
-export const createNote = async (body, query) => {
-    const {page, limit} = query;
-    checkPageNLimit(page, limit);
+export const createNote = async (body) => {
 
     const title = body.title;
     const content = body.content;
@@ -107,17 +105,21 @@ export const createNote = async (body, query) => {
 
     const fileBuffer = await dailyNotesModels.createNote(body);
     const data = JSON.parse(fileBuffer)
-    return result(data, page, limit)
-    
+    return {
+        "success" : true,
+        "message" : "Note created successfully",
+        "data" : data
+    };
+    // memperbaiki struktur return data
+        
 }
 
 export const updateNote = async (req) => {
     const {body, query} = req;
-    const {page, limit} = query;
-    checkPageNLimit(page, limit);
 
     const title = body.title;
     const content = body.content;
+    const image = body.image;
     
 
     if((!title || title.length < 1) || (!content || content.length < 1)){
@@ -141,7 +143,11 @@ export const updateNote = async (req) => {
 
     const fileBuffer = await dailyNotesModels.updateNote(body);
     const data = JSON.parse(fileBuffer)
-    return result(data, page, limit)
+    return {
+        "success" : true,
+        "message" : "Note updated successfully",
+        "data" : data
+    };
     
 }
 
@@ -177,17 +183,5 @@ export const validationLogin = async (userData) => {
     }
 
 }
-// 1. masukan name benar pw slah   -> notif "pw salah"
-// 2. masukan name salah pw salah  -> notif "user tidak ditemukan"
-// 3. masukan name benar pw benar  -> notif "success"
 
-
-// 1. kesalahan berada pada update note, ketika update note dengan 
-// image baru seharusnya menghapus image lama tetapi ini tidak bisa 
-// dan image baru nya masuk ke uploads tetapi tidak masuk kedata JSON
-
-// 2. kesalah berada pada update note dengan image baru namun sebelumnya tidak ada image.
-// nah akan terjadi error, file nya terupload di folder uploads tetapi tidak masuk ke data JSON
-
-// solusi : pahamin benar" flow alur data mu.
 

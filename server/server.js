@@ -19,15 +19,16 @@ app.use('/notes', dailyNotesRoutes)
 
 app.use((err, req, res, next) => {
      if (err.code === "LIMIT_FILE_SIZE") {
-     res.status(400).json({
-          success: false,
-          message: "File terlalu besar (max 2MB)"
-          });
+          return res.status(400).json({
+               success: false,
+               message: "File terlalu besar (max 2MB)"
+          });  
      }
 
-     res.status(err.statusCode || 500).json({
+     return res.status(err.statusCode || 500).json({
           success : false,
-          message : err.message
+          message : err.message,
+          data : null
      })
 })
 

@@ -47,7 +47,7 @@ router.get("/", getAllNotes);
 router.get("/:id", getNoteById);
 router.delete("/:id", deleteNote);
 router.post("/", upload.single('image'), createNote);    
-router.put("/:id", upload.single('image'), updateNote);
+router.put("/", upload.single('image'), updateNote);
 
 
 export default router;

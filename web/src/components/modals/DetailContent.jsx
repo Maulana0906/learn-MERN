@@ -1,19 +1,19 @@
 import Button from '../Button.jsx';
 
-function DetailContent({data, editNote}){
+function DetailContent({note, onClick}){
 
-    if(!data) return (
+    if(!note) return (
         <h1 className="text-center mt-10">loading</h1>
     )
 
 
     return (
         <>
-            <h1 className="mt-10 text-center font-semibold text-2xl">{data[0].title}</h1> 
-            <p className="m-2 text-sm text-justify">{data[0].content}</p>
-            <img src={"http://localhost:3000/uploads/"+data[0].image} alt="" className="w-20" />
+            <h1 className="mt-10 text-center font-semibold text-2xl">{note.title}</h1> 
+            <p className="m-2 text-sm text-justify">{note.content}</p>
+            <img src={"http://localhost:3000/uploads/"+note.image} alt="" className="w-20" />
             <div className="flex justify-center mt-4">
-                <Button  type="tersierBtn" content="Edit" onClickModal={editNote} typeButton="edit" idNotes={data[0].id} />
+                <Button  type="tersierBtn" content="Edit" onClick={() => onClick(note)}/>
             </div>
         </>
     )
