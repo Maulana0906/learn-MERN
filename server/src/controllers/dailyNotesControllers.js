@@ -20,7 +20,7 @@ export const getNoteById = async (req, res, next) => {
 
 export const deleteNote = async (req,res,next) => {
     try{
-        const result = await dailyNotesService.deleteNote(req.params.id, req.query);
+        const result = await dailyNotesService.deleteNote(req.params.id);
         res.status(200).json(result);
     }catch(err){
         next(err)

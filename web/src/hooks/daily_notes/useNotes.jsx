@@ -13,6 +13,12 @@ export const useNotes = () => {
     const [notes, setNotes] = useState(defaultValueNotes);
     const [load, setLoad] = useState(false)
     const [error, setError] = useState(null)
+    const [filter, setFilter] = useState({
+        page : 1,
+        limit : 5,
+        search : "",
+        sort : ""
+    })
 
     useEffect(() => {
         if(!error) return
@@ -23,6 +29,11 @@ export const useNotes = () => {
 
         return () => clearTimeout(timer)
     },[error])
+
+    useEffect(() => {
+        const params = new URLSearchParams(filter).toString();
+        fetchNotes(params);
+    }, [filter])
 
     const fetchNotes = async(params="") => {
         setLoad(true)
@@ -48,7 +59,7 @@ export const useNotes = () => {
         }
     }
 
-    const createNote = async ({formData, resetForm}, e) => {
+    const createNote = async ({formData, resetForm, closeModal}, e) => {
         e.preventDefault();
         
         setLoad(true)
@@ -81,6 +92,7 @@ export const useNotes = () => {
             await fetchNotes("page=1&limit=5");
 
             resetForm();
+            closeModal();
             return {success : true}
         }catch(err){
             setError(err.message);
@@ -89,9 +101,8 @@ export const useNotes = () => {
         }       
     }
 
-    const editNote = async (formData, e) => {
+    const editNote = async ({formData, closeModal}, e) => {
         e.preventDefault();
-        console.log(formData)
         setLoad(true)
              
         function validationTypeImg(file){
@@ -109,10 +120,10 @@ export const useNotes = () => {
             form.append("content", formData.content)
             form.append("image", formData.image)
 
+            console.log(formData)
             if(formData.image instanceof File){
                 validationTypeImg(formData.image)
             }
-
             const updateNote = await fetch(`http://localhost:3000/notes`, {
                 method : "PUT",
                 body : form
@@ -122,6 +133,8 @@ export const useNotes = () => {
             if(!updateNote.ok){
                 throw new Error(respon.message)
             }
+
+            closeModal(); 
             // PERLU PERBAIKAN, KARENA YANG DI EDIT KAN BUKAN SELALU HALAMAN KE-1
             await fetchNotes("page=1&limit=5");
 
@@ -132,13 +145,64 @@ export const useNotes = () => {
         }
     }
 
+    const deleteNote = async (note) => {
+        const confirm = window.confirm("Are you sure you want to delete this note ?")
+        if(!confirm) return;
+        const {id} = note;
+
+        setLoad(true)
+        try{
+            const delNote = await fetch(`http://localhost:3000/notes/${id}`, {
+                method : "DELETE",
+                headers : {
+                    "Content-Type" : "application/json"
+                }
+            })
+
+            const respon = await delNote.json();
+
+            if(!delNote.ok){
+                throw new Error(respon.message)
+            }
+            //TIDAK SEMUA HALAMAN YANG TELAH DIHALAMAN KE-1, JADI PERLU PERBAIKAN LAGI
+            await fetchNotes("page=1&limit=5");
+        }catch(err){
+            setError(err.message)
+        }finally{
+            setLoad(false)
+        }
+        
+    }
+
+    const changePage = (newPage) => {
+        setFilter(prev => ({...prev, page : newPage}))
+    }
+
+    const changeSearch = ({keyword, e}) => {
+        e.preventDefault();
+        setFilter(prev => ({...prev, search : keyword, page : 1}))
+    }
+
+    const changeSort = (type) => {
+        setFilter(prev => ({...prev, sort : type, page : 1}))
+    }
+    const resetValueSearch = () => {
+        setFilter(prev => ({...prev, search : "", page : 1}))
+    }
+
     return {
         notes,
         load,
-        error, 
+        error,
+        filter, 
         fetchNotes,
         createNote,
-        editNote
+        editNote,
+        deleteNote,
+        changePage,
+        changeSearch,
+        changeSort,
+        resetValueSearch
     }
 }
 

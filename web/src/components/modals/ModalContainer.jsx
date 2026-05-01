@@ -11,9 +11,9 @@ function ModalContainer({mode, closeModal, selectedNote, onClickEdit, sendNoteTo
     const {createNote, editNote} = useContext(NotesContext);
 
     const chooseContent = {
-        "create" : <CreateContent createNote={createNote} hookForm={useFormNote}/>,
-        "edit" : <EditContent note={selectedNote} editNote={editNote} hookForm={useFormNote}/>,
-        "detail" : <DetailContent note={selectedNote} onClick={onClickEdit} />    
+        "create" : <CreateContent createNote={createNote} hookForm={useFormNote} closeModal={closeModal} />,
+        "edit" : <EditContent note={selectedNote} editNote={editNote} hookForm={useFormNote} closeModal={closeModal}/>,
+        "detail" : <DetailContent note={selectedNote} onClick={onClickEdit} closeModal={closeModal}/>    
     }
 
    return (

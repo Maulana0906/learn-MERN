@@ -1,5 +1,5 @@
 
-function Button({type, content, onClick, note}){
+function Button({type, content, onClick, note, keyword}){
     let design = "";
     switch(type){
         case "tersierBtn" :
@@ -21,7 +21,7 @@ function Button({type, content, onClick, note}){
      
     
     return (
-        <button className={design} onClick={() => onClick(note)}>{content}</button>
+        <button className={design} onClick={() => onClick(note || keyword)}>{content}</button>
     )
 }
 

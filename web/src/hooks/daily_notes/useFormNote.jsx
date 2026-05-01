@@ -13,7 +13,7 @@ export const useFormNote = () => {
         const {name, value, files} = e.target;
         
         setFormData(prev => ({
-            ...prev, image : (name === "image") ? (files ? files[0] : value) : prev.image,
+            ...prev, image : name === "image" ? (files ? files[0] : value) : prev.image,
             ...(name !== "image" && {[name] : value}) 
         }))
     }

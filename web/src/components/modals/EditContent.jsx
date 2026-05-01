@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 
-function EditContent({note, editNote, hookForm}){
+function EditContent({note, editNote, hookForm, closeModal}){
     const {formData, changeForm} = hookForm();
     
     useEffect(() => {
@@ -14,7 +14,7 @@ function EditContent({note, editNote, hookForm}){
     return (
         <div className="flex flex-col p-4 tracking-wide">
             <h1 className="font-semibold text-lg text-gray-700">Edit Note</h1>
-            <form onSubmit={(e) => editNote({formData}, e)}>  
+            <form onSubmit={(e) => editNote({formData, closeModal}, e)}>  
                 <input type="hidden" 
                 name="id"
                 value={formData.id} />

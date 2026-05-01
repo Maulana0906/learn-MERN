@@ -37,8 +37,7 @@ export const deleteNote = async (id) => {
 
     const result = JSON.stringify(arrRes.filter(e => Number(e.id) !== Number(id)), null, 2);
     await fs.promises.writeFile(DATA_NOTES_PATH ,result, 'utf-8')
-    
-    return getNotes();
+    return true;
 }
 
 export const createNote = async (body) => {

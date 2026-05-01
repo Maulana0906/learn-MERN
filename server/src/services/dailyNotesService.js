@@ -35,41 +35,44 @@ const checkPageNLimit = (page, limit) => {
 }
 
 export const getAllNotes = async (query) => {
-    const {page, limit, search, sort} = query;
-    checkPageNLimit(page, limit);
-    const fileBuffer = await dailyNotesModels.getAllNotes();
+    const {page = 12, 
+        limit = 52,
+        search = "s",
+        sort = "s"
+    } = query;
 
-    let data = JSON.parse(fileBuffer)
+    const request = await dailyNotesModels.getAllNotes();
 
-    if(search){
-        const filtered = data.filter(e => {
+    let notes = JSON.parse(request)
+
+    if(search !== "" && search !== undefined){
+        const filtered = notes.filter(e => {
             const eTitle = e.title.toLowerCase()
 
             if(eTitle === search || eTitle.includes(search)){
                 return e;
             }
         })
-        data = filtered;
+        notes = filtered;
     }
-    if(sort){
+    if(sort !== "" && sort !== undefined){
         switch(sort){
             case "asc" : 
-                data.sort((a,b) => a.title.localeCompare(b.title));
+                notes.sort((a,b) => a.title.localeCompare(b.title));
                 break;
             case "desc" : 
-                data.sort((a,b) => b.title.localeCompare(a.title));
+                notes.sort((a,b) => b.title.localeCompare(a.title));
                 break;
-            case "news" : 
-                data.sort((a,b) => b.id - a.id);
+            case "newest" : 
+                notes.sort((a,b) => b.id - a.id);
                 break;
             case "olds" :
-                data.sort((a,b) => a.id - b.id);
+                notes.sort((a,b) => a.id - b.id);
                 break;
         } 
     }
 
-    return result(data, page, limit);
-   
+    return result(notes, page, limit);
 }
 
 export const getNoteById = async (id) => {
@@ -81,17 +84,26 @@ export const getNoteById = async (id) => {
     
 }
 
-export const deleteNote = async (id, query) => {
+export const deleteNote = async (id) => {
     if(!id || id.length < 1){
         throw new Error("Your id is not complete", {statusCode : 400});
     }
-    const {page, limit} = query;
-    checkPageNLimit(page, limit);
-
-    const fileBuffer = await dailyNotesModels.deleteNote(id);
-    const data = JSON.parse(fileBuffer)
+    const existingNote = await getNoteById(id);
+    const parseExistingNote = JSON.parse(existingNote);
     
-    return result(data, page, limit);
+    await dailyNotesModels.deleteNote(id);
+    const filePath = path.join(__dirname, "../../uploads/"+parseExistingNote[0].image);
+        
+    try{
+        fs.promises.unlink(filePath);
+    }catch(err){
+        throw new Error("Try again", {statusCode : 500})
+    }
+
+    return {
+        "success" : true,
+        "message" : "Note deleted successfully",
+    }
 }
 
 export const createNote = async (body) => {
@@ -103,23 +115,21 @@ export const createNote = async (body) => {
         throw new Error("Your data is not complete", {statusCode : 400});
     }
 
-    const fileBuffer = await dailyNotesModels.createNote(body);
-    const data = JSON.parse(fileBuffer)
+    const req = await dailyNotesModels.createNote(body);
+    const note = JSON.parse(req);
     return {
         "success" : true,
         "message" : "Note created successfully",
-        "data" : data
+        "data" : note
     };
-    // memperbaiki struktur return data
         
 }
 
 export const updateNote = async (req) => {
-    const {body, query} = req;
+    const {body} = req;
 
     const title = body.title;
     const content = body.content;
-    const image = body.image;
     
 
     if((!title || title.length < 1) || (!content || content.length < 1)){
@@ -141,12 +151,12 @@ export const updateNote = async (req) => {
         }
     }
 
-    const fileBuffer = await dailyNotesModels.updateNote(body);
-    const data = JSON.parse(fileBuffer)
+    const request = await dailyNotesModels.updateNote(body);
+    const note = JSON.parse(request)
     return {
         "success" : true,
         "message" : "Note updated successfully",
-        "data" : data
+        "data" : note
     };
     
 }
