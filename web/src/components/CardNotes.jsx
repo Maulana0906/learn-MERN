@@ -3,6 +3,7 @@ import Button from './Button.jsx';
 
 function CardNotes({note, onClick, useNotesDel, filter}){
     const {id, title, content, image} = note
+    
     const markSearch = (title, keyword) => {
         if(!keyword || keyword.length < 1) return title;
 
