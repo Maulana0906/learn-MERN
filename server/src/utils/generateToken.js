@@ -2,9 +2,10 @@ import { JWT_SECRET_KEY } from "../config/jwt.js";
 import jwt from "jsonwebtoken";
 
 export const generateAccessToken = (payload) => {
+    console.log(process.env.ACCESS_TOKEN)
     return jwt.sign(
            payload,
-           JWT_SECRET_KEY,
+           process.env.ACCESS_TOKEN,
            {expiresIn : "15m"}
        )
 }

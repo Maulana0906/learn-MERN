@@ -4,8 +4,12 @@ const app = express();
 app.use(express.json()); 
 
 import cors from "cors"; 
+import dotenv from "dotenv";
+
 app.use(cors()) 
 app.use(cookieParser())
+dotenv.config();
+
 
 // dipertanyakan
 import path from "path";
