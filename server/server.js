@@ -1,9 +1,11 @@
 import express from "express";
+import cookieParser from "cookie-parser";
 const app = express(); 
 app.use(express.json()); 
 
 import cors from "cors"; 
 app.use(cors()) 
+app.use(cookieParser())
 
 // dipertanyakan
 import path from "path";
@@ -15,7 +17,11 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 
 import dailyNotesRoutes from "./src/routes/dailyNotesRoutes.js"
+import authRoutes from "./src/routes/auth.routes.js"
+
 app.use('/notes', dailyNotesRoutes) 
+app.use("/users", authRoutes)
+
 
 app.use((err, req, res, next) => {
      if (err.code === "LIMIT_FILE_SIZE") {

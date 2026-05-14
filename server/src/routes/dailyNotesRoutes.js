@@ -42,7 +42,6 @@ const upload = multer({storage, fileFilter, limits : {fileSize : sizeLimit}})
 
 const router = express.Router();
 
-router.get("/login", validationLogin);
 router.get("/", getAllNotes);
 router.get("/:id", getNoteById);
 router.delete("/:id", deleteNote);

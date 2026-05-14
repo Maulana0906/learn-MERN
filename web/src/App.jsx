@@ -5,6 +5,7 @@
   import Home from './pages/Home.jsx';
   import DailyNotes from './pages/DailyNotes.jsx';
   import Setting from './pages/Setting.jsx';
+  import Login from './pages/Login.jsx';
   import {NotesProvider} from './context/NotesProvider.jsx'
 
   function App() {

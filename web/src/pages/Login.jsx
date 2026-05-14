@@ -21,7 +21,7 @@ function Login(){
 
     return (
         <div>
-            <form onSubmit={(e) => validationLogin(formData, e)}>
+            <form onSubmit={(e) => validationLogin(formData, e)} className="w-1/3 mx-auto">
                 <label htmlFor="title" className="flex gap-5 mt-10">
                     Username : 
                     <input type="text" className="w-3/4 border-2 border-gray-700 px-2 py-0.5 rounded-sm bg-gray-100" 

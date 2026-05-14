@@ -6,7 +6,6 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const DATA_NOTES_PATH = path.join(__dirname, "../data/notes.json")
-const DATA_USER_PATH = path.join(__dirname, "../data/user.json")
 
 const getNotes = async () => {
     return await fs.promises.readFile(DATA_NOTES_PATH , "utf-8");

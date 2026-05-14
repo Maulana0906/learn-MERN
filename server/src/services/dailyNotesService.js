@@ -161,37 +161,5 @@ export const updateNote = async (req) => {
     
 }
 
-export const validationLogin = async (userData) => {
-    if((!userData.username || userData.username.length < 1) || (!userData.password || userData.password.length < 1)){
-        throw new Error("Your data is not complete", {statusCode : 400});
-    }
-
-    const fileeBuffer = await dailyNotesModels.getAllUser();
-    const data = JSON.parse(fileeBuffer);
-
-    const msgReturn = (type, msg) => {
-        return JSON.stringify({
-            success : type,
-            message : msg
-        })
-    }
-
-    const result = data.map(e => {
-        if(e.username === userData.username){
-            if(e.password === userData.password){
-                return msgReturn(true, "Success login");
-            }else{
-                return msgReturn(false, "Password is wrong")
-            }
-        }
-    })
-
-    if(result.length < 1){
-        return msgReturn(false, "User is not found")
-    }else{
-        return result ;
-    }
-
-}
 
 
