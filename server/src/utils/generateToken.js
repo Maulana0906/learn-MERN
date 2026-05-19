@@ -1,19 +1,18 @@
-import { JWT_SECRET_KEY } from "../config/jwt.js";
+import {jwtConfig} from "../config/jwt.js";
 import jwt from "jsonwebtoken";
 
 export const generateAccessToken = (payload) => {
-    console.log(process.env.ACCESS_TOKEN)
     return jwt.sign(
-           payload,
-           process.env.ACCESS_TOKEN,
-           {expiresIn : "15m"}
-       )
+        payload,
+        jwtConfig.accessSecret,
+        {expiresIn : "15s"}
+    )
 }
 
 export const generateRefreshToken = (payload) => {
     return jwt.sign(
         payload,
-        JWT_SECRET_KEY,
+        jwtConfig.refreshSecret,
         {expiresIn : "1d"}
     ) 
 }

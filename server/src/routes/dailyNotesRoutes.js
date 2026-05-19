@@ -7,6 +7,7 @@ import {
     updateNote,
     validationLogin
 } from "../controllers/dailyNotesControllers.js";
+import { verifyToken } from "../middleware/auth.middleware.js";
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -42,11 +43,11 @@ const upload = multer({storage, fileFilter, limits : {fileSize : sizeLimit}})
 
 const router = express.Router();
 
-router.get("/", getAllNotes);
-router.get("/:id", getNoteById);
-router.delete("/:id", deleteNote);
-router.post("/", upload.single('image'), createNote);    
-router.put("/", upload.single('image'), updateNote);
+router.get("/", verifyToken, getAllNotes);
+router.get("/:id", verifyToken, getNoteById);
+router.delete("/:id", verifyToken, deleteNote);
+router.post("/", verifyToken, upload.single('image'), createNote);    
+router.put("/", verifyToken, upload.single('image'), updateNote);
 
 
 export default router;

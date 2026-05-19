@@ -1,30 +1,31 @@
+import dotenv from "dotenv/config";
+
 import express from "express";
 import cookieParser from "cookie-parser";
+import path from "path";
+import { fileURLToPath } from "url";
+import cors from "cors"; 
+
+import dailyNotesRoutes from "./src/routes/dailyNotesRoutes.js"
+import authRoutes from "./src/routes/auth.routes.js"
+
 const app = express(); 
 app.use(express.json()); 
 
-import cors from "cors"; 
-import dotenv from "dotenv";
-
-app.use(cors()) 
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true
+})) 
 app.use(cookieParser())
-dotenv.config();
-
-
-// dipertanyakan
-import path from "path";
-import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 
-import dailyNotesRoutes from "./src/routes/dailyNotesRoutes.js"
-import authRoutes from "./src/routes/auth.routes.js"
 
 app.use('/notes', dailyNotesRoutes) 
-app.use("/users", authRoutes)
+app.use("/user", authRoutes)
 
 
 app.use((err, req, res, next) => {
@@ -37,8 +38,7 @@ app.use((err, req, res, next) => {
 
      return res.status(err.statusCode || 500).json({
           success : false,
-          message : err.message,
-          data : null
+          message : err.message
      })
 })
 

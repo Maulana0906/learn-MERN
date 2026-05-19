@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { JWT_SECRET_KEY } from "../config/jwt.js";
+import {jwtConfig} from "../config/jwt.js";
 
 export const verifyToken = (req,res, next) => {
     const authHeader = req.headers.authorization;   
@@ -14,13 +14,16 @@ export const verifyToken = (req,res, next) => {
     const token = authHeader.split(" ")[1];    
 
     try{
-        const decoded = jwt.verify(token, JWT_SECRET_KEY);
+        const decoded = jwt.verify(token, jwtConfig.accessSecret);
         req.user = decoded;
         next()
-    }catch(err){
+    }catch(err){ 
+        const expT = err.name === "TokenExpiredError";
+        
         return res.status(401).json({
             success : false,
-            message : "Invalid token"
+            message: expT ? "Token expired" : "invalid token",
+            expired: expT ? true : false
         })
     }
 

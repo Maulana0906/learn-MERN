@@ -51,6 +51,10 @@ export const useNotes = () => {
                 throw new Error(data.message)
             }
 
+            if(res.status === 401 && data.expired){
+                alert("expired")
+            }
+
             setNotes(data);
         } catch(err){
             setError(err.message)
@@ -84,12 +88,12 @@ export const useNotes = () => {
                 method : "POST",
                 body : form
             })
-            const respon = await createNote.json();
+            const respon = await createNote.json(); 
             
             if(!createNote.ok){
                 throw new Error(respon.message)
             }
-            await fetchNotes("page=1&limit=5");
+            await fetchNotes(`page=${filter.page}&limit=${filter.limit}`);
 
             resetForm();
             closeModal();
@@ -136,7 +140,7 @@ export const useNotes = () => {
 
             closeModal(); 
             // PERLU PERBAIKAN, KARENA YANG DI EDIT KAN BUKAN SELALU HALAMAN KE-1
-            await fetchNotes("page=1&limit=5");
+            await fetchNotes(`page=${filter.page}&limit=${filter.limit}`);
 
         }catch(err){
             setError(err.message);
@@ -165,7 +169,7 @@ export const useNotes = () => {
                 throw new Error(respon.message)
             }
             //TIDAK SEMUA HALAMAN YANG TELAH DIHALAMAN KE-1, JADI PERLU PERBAIKAN LAGI
-            await fetchNotes("page=1&limit=5");
+            await fetchNotes(`page=${filter.page}&limit=${filter.limit}`);
         }catch(err){
             setError(err.message)
         }finally{

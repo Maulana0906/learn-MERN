@@ -10,19 +10,24 @@ import {
 export const loginService = async (data) => {
     try{
         if(data.username==="" || data.password === ""){
-            throw new Error("Your data is not complete", {statusCode : 400})
+            const err = new Error("Your data is not complete")
+            err.statusCode = 400;
+            throw err
         }
         const users = await getAllUsers();
-
         const user = users.find((user) => user.username === data.username);
 
         if(!user){
-            throw new Error("User not found", {statusCode : 401})
+            const err = new Error("User not found")
+            err.statusCode = 401
+            throw err
         }
         const isMatch = await bcrypt.compare(data.password, user.password)
 
         if(!isMatch){
-            throw new Error("Invalid password", {statusCode : 401})
+            const err = new Error("Invalid password")
+            err.statusCode = 401
+            throw err
         }
 
         const accessToken =  generateAccessToken({id : user.id, username : user.username, role : user.role})

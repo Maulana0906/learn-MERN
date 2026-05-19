@@ -3,7 +3,6 @@ import {
     loginService,
     registerService
 } from "../services/auth.services.js";
-import { access } from "fs";
 
 export const loginController = async (req,res, next) => {
     try{
