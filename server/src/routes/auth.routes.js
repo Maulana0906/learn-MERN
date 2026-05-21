@@ -5,7 +5,8 @@ import {
     loginController,
     logoutController,
     getMeController,
-    registerController 
+    registerController,
+    newAccessToken
 } from "../controllers/auth.controllers.js";
 
 const router = express.Router();
@@ -14,6 +15,6 @@ router.post("/login", loginController);
 router.post("/logout", logoutController);
 router.get("/me", verifyToken, getMeController);
 router.post("/register", registerController);
-router.post
+router.get("/access_token", newAccessToken)
 
 export default router;

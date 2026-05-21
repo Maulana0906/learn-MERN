@@ -19,7 +19,7 @@ export const HooksAuth = () => {
             })
 
             const respon = await postLogin.json(); 
-            console.log(respon)
+            
             if(!postLogin.ok){
                 throw new Error(respon.message)
             }

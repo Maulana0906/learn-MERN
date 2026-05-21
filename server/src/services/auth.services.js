@@ -1,6 +1,6 @@
 import express from "express";
 import bcrypt from "bcrypt";
-import { generateAccessToken, generateRefreshToken } from "../utils/generateToken.js";
+import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../utils/generateToken.js";
 
 import {
     getAllUsers,
@@ -61,6 +61,27 @@ export const registerService = async (user) => {
         };
     }catch(err){
         throw err;
+    }
+}
+
+export const newAccessTokenService = (token) => {
+    try{
+        const check = verifyRefreshToken(token)
+        // if(!check){
+        //     const err = new Error("token is not valid")
+        //     err.statusCode = 401;
+        //     throw err;
+        // }
+
+        console.log(check)
+        const accessToken = generateAccessToken(check);
+
+        return {
+            accessToken
+        }
+
+    }catch(err){
+        throw(err)
     }
 }
 

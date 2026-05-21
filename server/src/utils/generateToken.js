@@ -5,7 +5,7 @@ export const generateAccessToken = (payload) => {
     return jwt.sign(
         payload,
         jwtConfig.accessSecret,
-        {expiresIn : "15s"}
+        {expiresIn : "10s"}
     )
 }
 
@@ -15,4 +15,9 @@ export const generateRefreshToken = (payload) => {
         jwtConfig.refreshSecret,
         {expiresIn : "1d"}
     ) 
+}
+
+export const verifyRefreshToken = (token) => {
+    const decode = jwt.verify(token, jwtConfig.refreshSecret)
+    return decode;
 }

@@ -35,25 +35,49 @@ export const useNotes = () => {
         fetchNotes(params);
     }, [filter])
 
+    const getNewAccessToken = async () => {
+        setLoad(true)
+        try{
+            const res = await fetch(`http://localhost:3000/user/access_token`, {
+                        method : "GET",
+                        credentials: "include"
+            })
+            const data = await res.json();
+            console.log(data)
+
+            localStorage.setItem("accessToken" , data.accessToken)
+        }catch(err){
+            setError(err)
+        }finally{
+            setLoad(false)
+        }
+    }   
+
     const fetchNotes = async(params="") => {
         setLoad(true)
         try{
             
             const res = await fetch(`http://localhost:3000/notes?${params}`, {
                 method : "GET",
+                credentials: "include",
                 headers : {
-                            "Content-Type" : "application/json"
+                            "Content-Type" : "application/json",
+                            authorization : `Bearer ${localStorage.getItem("accessToken")}`
                         }
             })
             const data = await res.json();
+
+            if(res.status === 401 && data.expired){
+                await getNewAccessToken()
+                
+                return fetchNotes(params)
+                return;
+            }
 
             if(!res.ok){
                 throw new Error(data.message)
             }
 
-            if(res.status === 401 && data.expired){
-                alert("expired")
-            }
 
             setNotes(data);
         } catch(err){
