@@ -71,7 +71,6 @@ export const useNotes = () => {
                 await getNewAccessToken()
                 
                 return fetchNotes(params)
-                return;
             }
 
             if(!res.ok){

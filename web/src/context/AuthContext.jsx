@@ -1,4 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { AuthUtils } from '../utils/AuthUtils.jsx';
+
 
 const AuthContext = createContext(null)
 
@@ -15,19 +17,33 @@ export function AuthProvider ({children}) {
                             authorization : `Bearer ${localStorage.getItem("accessToken")}`
                         }
                     })
-                
-                if(!res.ok){
-                    throw new Error("Unauthorized")
+                const data = await res.json();
+                console.log(res, data)
+
+                if(res.status === 401 && data.expired){
+                    await AuthUtils.getNewAccessToken()
+                    
+                    return await getMe()
                 }
-                const userData = res.json();
-                setUser(userData)
+
+                if(!res.ok){
+                    throw new Error(data.message)
+                }
+
+                setUser(data)
             }catch(err){
                 setUser(null)
-            }finally{
-                setIsLoading(false)
             }
         } 
-        getMe()
+        const initializeAuth = async () => {
+            setIsLoading(true)
+
+            await getMe()
+
+            setIsLoading(false)
+        }
+
+    initializeAuth()
     }, [])
 
 

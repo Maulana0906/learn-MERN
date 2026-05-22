@@ -66,15 +66,16 @@ export const registerService = async (user) => {
 
 export const newAccessTokenService = (token) => {
     try{
-        const check = verifyRefreshToken(token)
-        // if(!check){
-        //     const err = new Error("token is not valid")
-        //     err.statusCode = 401;
-        //     throw err;
-        // }
+        const newToken = verifyRefreshToken(token)
+        if(!newToken){
+            const err = new Error("token is not valid")
+            err.statusCode = 401;
+            throw err;
+        }
 
-        console.log(check)
-        const accessToken = generateAccessToken(check);
+        const accessToken = generateAccessToken(
+            {id : newToken.id, username : newToken.username, role : newToken.role}
+        );
 
         return {
             accessToken
