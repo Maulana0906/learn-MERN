@@ -15,7 +15,8 @@ function DailyNotes(){
 
 const {notes, load, error, filter, fetchNotes, deleteNote, changePage, changeSearch, changeSort, resetValueSearch} = useContext(NotesContext);
 const {isOpenModal, mode, selectedNote, openCreate, openDetail, openEdit, closeModal} = useModalNote();
-
+console.log(filter)
+console.log(notes.meta)
     
     return (
         <>

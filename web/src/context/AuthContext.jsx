@@ -7,6 +7,7 @@ const AuthContext = createContext(null)
 export function AuthProvider ({children}) {
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const {getNewAccessToken} = AuthUtils(); 
 
     useEffect(() => {
         const getMe = async () => {
@@ -18,10 +19,8 @@ export function AuthProvider ({children}) {
                         }
                     })
                 const data = await res.json();
-                console.log(res, data)
-
                 if(res.status === 401 && data.expired){
-                    await AuthUtils.getNewAccessToken()
+                    await getNewAccessToken()
                     
                     return await getMe()
                 }

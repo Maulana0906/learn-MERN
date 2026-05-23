@@ -1,4 +1,6 @@
 import {useEffect, useState} from "react";
+import { AuthUtils } from '../../utils/AuthUtils.jsx';
+import { FetchWithAuth } from "../../utils/fetchWithAuth.jsx";
 
 export const useNotes = () => {
     const defaultValueNotes = {
@@ -19,6 +21,7 @@ export const useNotes = () => {
         search : "",
         sort : ""
     })
+    const {getNewAccessToken} = AuthUtils();
 
     useEffect(() => {
         if(!error) return
@@ -35,50 +38,21 @@ export const useNotes = () => {
         fetchNotes(params);
     }, [filter])
 
-    const getNewAccessToken = async () => {
-        setLoad(true)
-        try{
-            const res = await fetch(`http://localhost:3000/user/access_token`, {
-                        method : "GET",
-                        credentials: "include"
-            })
-            const data = await res.json();
-            console.log(data)
-
-            localStorage.setItem("accessToken" , data.accessToken)
-        }catch(err){
-            setError(err)
-        }finally{
-            setLoad(false)
-        }
-    }   
 
     const fetchNotes = async(params="") => {
         setLoad(true)
         try{
             
-            const res = await fetch(`http://localhost:3000/notes?${params}`, {
+            const res = await FetchWithAuth(`http://localhost:3000/notes?${params}`, {
                 method : "GET",
                 credentials: "include",
                 headers : {
                             "Content-Type" : "application/json",
-                            authorization : `Bearer ${localStorage.getItem("accessToken")}`
                         }
             })
-            const data = await res.json();
 
-            if(res.status === 401 && data.expired){
-                await getNewAccessToken()
-                
-                return fetchNotes(params)
-            }
-
-            if(!res.ok){
-                throw new Error(data.message)
-            }
-
-
-            setNotes(data);
+            setNotes(res);
+            console.log(notes)
         } catch(err){
             setError(err.message)
         } finally{
@@ -107,15 +81,11 @@ export const useNotes = () => {
 
             validationTypeImg(formData.image)
             
-            const createNote = await fetch("http://localhost:3000/notes", {
-                method : "POST",
-                body : form
-            })
-            const respon = await createNote.json(); 
-            
-            if(!createNote.ok){
-                throw new Error(respon.message)
-            }
+            const createNote = await FetchWithAuth("http://localhost:3000/notes", {
+                    method : "POST",
+                    body : form
+                })
+
             await fetchNotes(`page=${filter.page}&limit=${filter.limit}`);
 
             resetForm();
@@ -139,7 +109,7 @@ export const useNotes = () => {
                 throw new Error("File must be an image")
             }
         }
-
+        console.log(filter.page, filter.limit)
         try{
             const form = new FormData();
             form.append("id", formData.id)
@@ -151,18 +121,13 @@ export const useNotes = () => {
             if(formData.image instanceof File){
                 validationTypeImg(formData.image)
             }
-            const updateNote = await fetch(`http://localhost:3000/notes`, {
+            const updateNote = await FetchWithAuth(`http://localhost:3000/notes`, {
                 method : "PUT",
                 body : form
             })
-            const respon = await updateNote.json();
-            
-            if(!updateNote.ok){
-                throw new Error(respon.message)
-            }
+            console.log(updateNote)
 
             closeModal(); 
-            // PERLU PERBAIKAN, KARENA YANG DI EDIT KAN BUKAN SELALU HALAMAN KE-1
             await fetchNotes(`page=${filter.page}&limit=${filter.limit}`);
 
         }catch(err){
@@ -179,19 +144,12 @@ export const useNotes = () => {
 
         setLoad(true)
         try{
-            const delNote = await fetch(`http://localhost:3000/notes/${id}`, {
+            const delNote = await FetchWithAuth(`http://localhost:3000/notes/${id}`, {
                 method : "DELETE",
                 headers : {
                     "Content-Type" : "application/json"
                 }
             })
-
-            const respon = await delNote.json();
-
-            if(!delNote.ok){
-                throw new Error(respon.message)
-            }
-            //TIDAK SEMUA HALAMAN YANG TELAH DIHALAMAN KE-1, JADI PERLU PERBAIKAN LAGI
             await fetchNotes(`page=${filter.page}&limit=${filter.limit}`);
         }catch(err){
             setError(err.message)
@@ -233,3 +191,7 @@ export const useNotes = () => {
     }
 }
 
+// SETELAH CRUD DI HALAMAN TERAKHIR ADA BUG TIBA TIBA DATA HILANG
+// REGISTRASI BELUM
+// LOGOUT BELUM
+// MEMPERBAIKI AUTHCONTEXT SUPAYA PAKAI FETCH_WITH_AUTH

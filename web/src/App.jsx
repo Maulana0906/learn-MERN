@@ -12,7 +12,6 @@
   import { AuthProvider } from './context/AuthContext.jsx';
   import AuthGuard from './components/guards/AuthGuard.jsx';
   import GuestGuard from './components/guards/GuestGuard.jsx';
-  import { AuthUtils } from './utils/AuthUtils.jsx';
 
   function App() {
 

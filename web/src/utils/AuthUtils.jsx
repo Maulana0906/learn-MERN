@@ -12,10 +12,6 @@ export const AuthUtils = ()=>{
             throw err
         }
     }   
-
-
-
-
     return {
         getNewAccessToken
     }
