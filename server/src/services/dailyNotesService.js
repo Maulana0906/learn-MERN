@@ -35,10 +35,10 @@ const checkPageNLimit = (page, limit) => {
 }
 
 export const getAllNotes = async (query) => {
-    const {page = 12, 
-        limit = 52,
-        search = "s",
-        sort = "s"
+    const {page = 1, 
+        limit = 5,
+        search = "",
+        sort = ""
     } = query;
 
     const request = await dailyNotesModels.getAllNotes();

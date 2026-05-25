@@ -6,6 +6,7 @@
   import DailyNotes from './pages/DailyNotes.jsx';
   import Setting from './pages/Setting.jsx';
   import Login from './pages/Login.jsx';
+  import Register from './pages/Register.jsx';
   import {NotesProvider} from './context/NotesProvider.jsx'
   import MainLayout from './layouts/MainLayout.jsx';
   import AuthLayout from './layouts/AuthLayout.jsx';
@@ -38,6 +39,7 @@
                 </GuestGuard>
                 }>
                 <Route path='/login' element={<Login />} />
+                <Route path='/register' element={<Register />} />
               </Route>
             </Routes>
           </AuthProvider>

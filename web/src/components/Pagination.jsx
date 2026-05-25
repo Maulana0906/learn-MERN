@@ -13,7 +13,6 @@ function Pagination({page, limit, totalNotes, totalPages, switchPage}) {
     const endPage = Math.min(startPage + windowSize - 1, totalPages);
     
     const visiblePages = numberPage.filter(el => el >= startPage && el <= endPage);
-    console.log("current block :", currentBlock, " | total block : ", totalBlock, " | page :", page)
 
     let isLastPage = false;
     numberPage.forEach(el => {

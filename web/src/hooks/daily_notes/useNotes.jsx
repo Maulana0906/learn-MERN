@@ -1,5 +1,4 @@
 import {useEffect, useState} from "react";
-import { AuthUtils } from '../../utils/AuthUtils.jsx';
 import { FetchWithAuth } from "../../utils/fetchWithAuth.jsx";
 
 export const useNotes = () => {
@@ -21,7 +20,6 @@ export const useNotes = () => {
         search : "",
         sort : ""
     })
-    const {getNewAccessToken} = AuthUtils();
 
     useEffect(() => {
         if(!error) return
@@ -52,7 +50,6 @@ export const useNotes = () => {
             })
 
             setNotes(res);
-            console.log(notes)
         } catch(err){
             setError(err.message)
         } finally{
@@ -117,7 +114,6 @@ export const useNotes = () => {
             form.append("content", formData.content)
             form.append("image", formData.image)
 
-            console.log(formData)
             if(formData.image instanceof File){
                 validationTypeImg(formData.image)
             }
@@ -125,7 +121,6 @@ export const useNotes = () => {
                 method : "PUT",
                 body : form
             })
-            console.log(updateNote)
 
             closeModal(); 
             await fetchNotes(`page=${filter.page}&limit=${filter.limit}`);
@@ -191,7 +186,7 @@ export const useNotes = () => {
     }
 }
 
-// SETELAH CRUD DI HALAMAN TERAKHIR ADA BUG TIBA TIBA DATA HILANG
+// SETELAH CRUD DI HALAMAN TERAKHIR ADA BUG TIBA TIBA DATA HILANG -
+// MEMPERBAIKI AUTHCONTEXT SUPAYA PAKAI FETCH_WITH_AUTH -
 // REGISTRASI BELUM
-// LOGOUT BELUM
-// MEMPERBAIKI AUTHCONTEXT SUPAYA PAKAI FETCH_WITH_AUTH
+// LOGOUT BELUM -

@@ -16,5 +16,11 @@
     "username": "aldi2356",
     "password": "$2b$10$/kDwXqYYEtwKbnSuSE/NX.Isay3vExVomOftiqe9hBvNuqoklIA2O",
     "role": "admin"
+  },
+  {
+    "id": 4,
+    "username": "aldi1234",
+    "password": "$2b$10$VY1e9iU2tIyR8YzFp8x5Wu7fn8FMijWb0CzBZQNG4x6sWSHBvkbu.",
+    "role": "user"
   }
 ]
