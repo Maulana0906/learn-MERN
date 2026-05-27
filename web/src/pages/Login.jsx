@@ -1,12 +1,27 @@
+import { useState } from "react";
 import {HooksAuth} from "../hooks/auth/HooksAuth";
 import {UseFormAuth} from "../hooks/auth/UseFormAuth.jsx";
 
 function Login(){
     const {loginUser} = HooksAuth();
     const {formData, changeForm} = UseFormAuth()
+    const [alertRegister, setAlertRegister] = useState(localStorage.getItem("alertRegister"));
+
+    setTimeout(() => {
+        setAlertRegister(null);
+        localStorage.removeItem("alertRegister")
+    }, 5000)
 
     return (
         <div>
+            {
+                alertRegister && (
+                    <div className="absolute right-5 top-5 flex items-start sm:items-center p-4 mb-4 text-sm rounded-md bg-green-300 " role="alert">
+                        <p>{alertRegister}</p>
+                    </div>
+                )
+            }
+            <h1 className="text-center text-lg font-semibold">Login</h1>
             <form onSubmit={(e) => loginUser(formData, e)} className="w-1/3 mx-auto">
                 <label htmlFor="title" className="flex gap-5 mt-10">
                     Username : 

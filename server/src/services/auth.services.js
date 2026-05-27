@@ -45,7 +45,7 @@ export const registerService = async (user) => {
     try{
         const username = user.username;
         const password = user.password;
-        const role = user.role;
+        const role = user.role ? user.role : "user";
         
         if((!username || username.length < 1) || (!password || password.length < 1) || (!role || role.length < 1)){
             throw new Error("Your data is not complete", {statusCode : 400});

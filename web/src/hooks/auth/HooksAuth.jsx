@@ -1,8 +1,10 @@
 import { useAuth } from "../../context/AuthContext";
 import { FetchWithAuth } from "../../utils/fetchWithAuth";
+import { useNavigate } from "react-router-dom"
 
 export const HooksAuth = () => {
     const {login, logout, setIsLoading} = useAuth();
+    const navigate = useNavigate();
 
     const loginUser = async (user, e) => {
         e.preventDefault();
@@ -62,6 +64,9 @@ export const HooksAuth = () => {
                 throw new Error(respon.message)
             }
         setIsLoading(false)
+        
+        localStorage.setItem("alertRegister", "Successfully registered, please login");
+        navigate("/login")
         }catch(err){
             console.log(err)
         }
